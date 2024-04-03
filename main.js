@@ -6,6 +6,7 @@ const targetCoin = process.env.TARGET_COIN.toLowerCase()
 const investment = process.env.INV
 
 const client = new Spot(apiKey, apiSecret)
+let executed = false;
 
 const callbacks = {
     open: () => {
@@ -15,6 +16,7 @@ const callbacks = {
         console.log('Disconnected with Websocket server')
     },
     message: data => {
+        if (executed) return;
         console.log(data)
         client.newOrder(targetCoin, 'BUY', 'MARKET', {
             quoteOrderQty: investment,
